@@ -47,7 +47,10 @@ watch(collapsed, (newCollapsed) => {
 
 // 监听全屏状态变化
 watch(fullscreen, (newFullscreen) => {
-  if (!newFullscreen && !collapsed.value) {
+  if (newFullscreen) {
+    // 进入全屏时自动展开
+    collapsed.value = false;
+  } else if (!collapsed.value) {
     // 退出全屏时重新计算高度
     const content = props.node.attrs.content || '';
     if (content) {
@@ -129,6 +132,7 @@ onMounted(() => {
       </div>
       <div class="typst-nav-end">
         <div
+          v-if="!fullscreen"
           class="typst-collapse-icon"
           @click="collapsed = !collapsed"
         >
@@ -148,10 +152,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div v-if="collapsed" class="typst-collapsed-hint">
+    <div v-if="collapsed && !fullscreen" class="typst-collapsed-hint">
       <span>Typst 内容块已折叠</span>
     </div>
-    <div class="typst-editor-panel" :class="{ 'typst-collapsed': collapsed }" :style="{ height: collapsed ? '0px' : (fullscreen ? '100%' : currentHeight + 'px') }">
+    <div class="typst-editor-panel" :class="{ 'typst-collapsed': collapsed && !fullscreen }" :style="{ height: (collapsed && !fullscreen) ? '0px' : (fullscreen ? '100%' : currentHeight + 'px') }">
       <div class="typst-code">
         <VCodemirror
           :model-value="props.node.attrs.content || ''"
