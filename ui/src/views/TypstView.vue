@@ -327,20 +327,4 @@ onMounted(() => {
   border-bottom: 1px solid #e7e7e7;
 }
 
-/* Typst 文档链接图标样式 */
-.typst-nav-start a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s;
-}
-
-.typst-nav-start a:hover {
-  color: #999;
-}
-
-.typst-nav-start a svg {
-  font-size: 18px;
-}
 </style>

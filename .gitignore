@@ -29,6 +29,9 @@ node_modules/
 *.ipr
 log/
 
+### Trae
+.trae/
+
 ### NetBeans
 nbproject/private/
 build/
