@@ -54,17 +54,21 @@ jobs:
       - name: Package Plugin
         run: ./gradlew jar
 
-      - name: Set JAR filename with version
+      - name: Find and prepare JAR file
         id: jar-info
         run: |
-          VERSION=${{ github.event.release.tag_name }}
-          JAR_NAME="plugin-typst-${VERSION}.jar"
-          echo "JAR_NAME=$JAR_NAME" >> $GITHUB_ENV
+          # Find the actual JAR file and verify it exists
+          ACTUAL_JAR=$(find ./build/libs -name "*.jar" -type f | head -n 1)
+          echo "Built JAR: $ACTUAL_JAR"
 
-      - name: Rename JAR file
-        run: |
-          ORIGINAL_JAR=$(find ./build/libs -name "*.jar" -type f | head -n 1)
-          cp "$ORIGINAL_JAR" "./build/libs/${{ steps.jar-info.outputs.JAR_NAME }}"
+          if [ -f "$ACTUAL_JAR" ]; then
+            echo "JAR_PATH=$ACTUAL_JAR" >> $GITHUB_ENV
+            echo "JAR_NAME=$(basename $ACTUAL_JAR)" >> $GITHUB_ENV
+            echo "Found JAR file: $ACTUAL_JAR"
+          else
+            echo "Error: No JAR file found in ./build/libs/"
+            exit 1
+          fi
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -72,6 +76,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./build/libs/${{ env.JAR_NAME }}
+          asset_path: ${{ env.JAR_PATH }}
           asset_name: ${{ env.JAR_NAME }}
           asset_content_type: application/java-archive

@@ -49,3 +49,9 @@ halo {
     version = '2.21'
 }
 
+// Set custom JAR name
+jar {
+    archiveBaseName = 'plugin-typst'
+    archiveVersion = project.version
+}
+
