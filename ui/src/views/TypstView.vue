@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { nodeViewProps, NodeViewWrapper } from "@halo-dev/richtext-editor";
-import { nextTick, onMounted, ref, watch } from "vue";
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
 import IcOutlineFullscreen from "~icons/ic/outline-fullscreen";
 import IcOutlineFullscreenExit from "~icons/ic/outline-fullscreen-exit";
@@ -79,6 +79,27 @@ const renderPreview = useDebounceFn(() => {
 }, 250);
 
 onMounted(() => {
+  // 添加ESC键退出全屏的监听
+  const handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape' && fullscreen.value) {
+      fullscreen.value = false;
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+  
+  document.addEventListener('keydown', handleKeydown, true);
+  
+  // 清理函数
+  const cleanup = () => {
+    document.removeEventListener('keydown', handleKeydown, true);
+  };
+  
+  // 组件卸载时清理事件监听
+  onUnmounted(() => {
+    cleanup();
+  });
+  
   watch(
     () => props.node.attrs.content,
     (newContent) => {
@@ -217,6 +238,18 @@ onMounted(() => {
   height: 100%;
   background: #fff;
   margin-top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.typst-fullscreen .typst-nav {
+  flex-shrink: 0;
+}
+
+.typst-fullscreen .typst-editor-panel {
+  flex: 1;
+  height: auto !important;
+  min-height: 0;
 }
 
 .typst-fullscreen-icon {
@@ -258,5 +291,27 @@ onMounted(() => {
 
 .typst-fullscreen-icon:hover {
   color: #999;
+}
+
+/* 全屏模式下的额外样式 */
+.typst-fullscreen .typst-editor-panel {
+  overflow: hidden;
+}
+
+.typst-fullscreen .typst-code {
+  overflow: auto;
+}
+
+.typst-fullscreen .typst-preview {
+  overflow: auto;
+}
+
+/* 确保标题栏在全屏时始终可见 */
+.typst-fullscreen .typst-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #e7e7e7;
 }
 </style>
