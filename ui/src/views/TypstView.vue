@@ -4,6 +4,7 @@ import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
 import IcOutlineFullscreen from "~icons/ic/outline-fullscreen";
 import IcOutlineFullscreenExit from "~icons/ic/outline-fullscreen-exit";
+import IcOutlineTipsAndUpdates from "~icons/ic/outline-tips-and-updates";
 import TypstRenderer from "@components/TypstRenderer.vue";
 
 const props = defineProps(nodeViewProps);
@@ -128,7 +129,14 @@ onMounted(() => {
   >
     <div class="typst-nav">
       <div class="typst-nav-start">
-        <div>Typst 编辑器</div>
+        <div>Typst 编辑块</div>
+        <a
+          v-tooltip="`查阅 Typst 的文档`"
+          href="https://typst.app/docs/"
+          target="_blank"
+        >
+          <IcOutlineTipsAndUpdates />
+        </a>
       </div>
       <div class="typst-nav-end">
         <div
@@ -317,5 +325,22 @@ onMounted(() => {
   z-index: 1000;
   background: #fff;
   border-bottom: 1px solid #e7e7e7;
+}
+
+/* Typst 文档链接图标样式 */
+.typst-nav-start a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.typst-nav-start a:hover {
+  color: #999;
+}
+
+.typst-nav-start a svg {
+  font-size: 18px;
 }
 </style>
