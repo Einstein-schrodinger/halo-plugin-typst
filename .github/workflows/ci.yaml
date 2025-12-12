@@ -34,6 +34,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Show current version
+        run: |
+          echo "Current version from gradle.properties:"
+          grep "^version=" gradle.properties || echo "Version not found"
+
       - name: Build with Gradle
         run: ./gradlew clean build
 
