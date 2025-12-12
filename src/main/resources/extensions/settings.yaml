@@ -1,0 +1,14 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: plugin-typst-settings
+spec:
+  forms:
+    - group: basic
+      label: 基本设置
+      formSchema:
+        - $formkit: text
+          name: typstSelector
+          label: typst-CSS选择器
+          value: "typst[data-type=typst]"
+          help: 用于匹配typst的CSS选择器

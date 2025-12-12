@@ -1,0 +1,24 @@
+# Refer https://docs.halo.run/developer-guide/plugin/basics/manifest
+
+apiVersion: plugin.halo.run/v1alpha1
+kind: Plugin
+metadata:
+  # The name defines how the plugin is invoked, A unique name
+  name: plugin-typst
+spec:
+  enabled: true
+  requires: ">=2.21.0"
+  author:
+    name: sqwfly
+    website: https://github.com/sqwfly
+  logo: static/logo.png
+  homepage: https://github.com/sqwfly/typst#readme
+  repo: https://github.com/sqwfly/typst
+  issues: https://github.com/sqwfly/typst/issues
+  displayName: "Typst"
+  description: "为编辑器和文章渲染提供 Typst 支持"
+  settingName: plugin-typst-settings
+  configMapName: plugin-typst-configMap
+  license:
+    - name: "GPL-3.0"
+      url: "https://github.com/sqwfly/typst/blob/main/LICENSE"
