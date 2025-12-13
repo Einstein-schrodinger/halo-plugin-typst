@@ -12,12 +12,10 @@ import run.halo.app.theme.ReactivePostContentHandler;
 @RequiredArgsConstructor
 @Slf4j
 public class DefaultPostContentHandler implements ReactivePostContentHandler {
-
     private final ReactiveSettingFetcher reactiveSettingFetcher;
 
     private static void injectJS(PostContentContext contentContext, String typstSelector) {
-        String parsedTypstScript =
-            TypstJSInjector.getParsedTypstScript(typstSelector);
+        String parsedTypstScript = TypstJSInjector.getParsedTypstScript(typstSelector);
         contentContext.setContent(contentContext.getContent() + "\n" + parsedTypstScript);
     }
 

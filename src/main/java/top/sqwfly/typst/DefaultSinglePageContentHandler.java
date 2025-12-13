@@ -12,12 +12,10 @@ import run.halo.app.theme.ReactiveSinglePageContentHandler;
 @RequiredArgsConstructor
 @Slf4j
 public class DefaultSinglePageContentHandler implements ReactiveSinglePageContentHandler {
-
     private final ReactiveSettingFetcher reactiveSettingFetcher;
 
     private static void injectJS(SinglePageContentContext contentContext, String typstSelector) {
-        String parsedTypstScript =
-            TypstJSInjector.getParsedTypstScript(typstSelector);
+        String parsedTypstScript = TypstJSInjector.getParsedTypstScript(typstSelector);
         contentContext.setContent(contentContext.getContent() + "\n" + parsedTypstScript);
     }
 

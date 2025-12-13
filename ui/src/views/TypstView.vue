@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { nodeViewProps, NodeViewWrapper } from "@halo-dev/richtext-editor";
-import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { useDebounceFn } from "@vueuse/core";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import IcOutlineFullscreen from "~icons/ic/outline-fullscreen";
 import IcOutlineFullscreenExit from "~icons/ic/outline-fullscreen-exit";
 import IcOutlineTipsAndUpdates from "~icons/ic/outline-tips-and-updates";
@@ -74,14 +73,6 @@ function onEditorBlur() {
   }
 }
 
-// 监听内容变化并重新渲染
-const renderPreview = useDebounceFn(() => {
-  nextTick(() => {
-    // 这里可以添加额外的渲染逻辑
-    // Typst组件会自动处理内容变化
-  });
-}, 250);
-
 onMounted(() => {
   // 添加ESC键退出全屏的监听
   const handleKeydown = (event: KeyboardEvent) => {
@@ -107,7 +98,6 @@ onMounted(() => {
   watch(
     () => props.node.attrs.content,
     (newContent) => {
-      renderPreview();
       // 初始化时调整高度
       if (newContent && !collapsed.value && !fullscreen.value) {
         adjustHeightByContent(newContent);
@@ -119,7 +109,6 @@ onMounted(() => {
   if (initialContent && !collapsed.value && !fullscreen.value) {
     adjustHeightByContent(initialContent);
   }
-  renderPreview();
 });
 </script>
 <template>
@@ -326,5 +315,4 @@ onMounted(() => {
   background: #fff;
   border-bottom: 1px solid #e7e7e7;
 }
-
 </style>

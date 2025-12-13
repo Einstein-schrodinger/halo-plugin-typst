@@ -15,14 +15,13 @@ import run.halo.app.theme.dialect.TemplateHeadProcessor;
 @Component
 @RequiredArgsConstructor
 public class TypstHeadProcessor implements TemplateHeadProcessor {
-
     static final PropertyPlaceholderHelper PROPERTY_PLACEHOLDER_HELPER = new PropertyPlaceholderHelper("${", "}");
 
     private final PluginContext pluginContext;
 
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model,
-        IElementModelStructureHandler structureHandler) {
+            IElementModelStructureHandler structureHandler) {
         final IModelFactory modelFactory = context.getModelFactory();
         model.add(modelFactory.createText(getHeadTags()));
         return Mono.empty();
@@ -33,10 +32,13 @@ public class TypstHeadProcessor implements TemplateHeadProcessor {
         final Properties properties = new Properties();
         properties.setProperty("version", pluginContext.getVersion());
 
-        return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders("""
-            <!-- plugin-typst start -->
-            <script type="module" src="/plugins/plugin-typst/assets/static/typst-all-in-one.js?version=${version}"></script>
-            <!-- plugin-typst end -->
-            """, properties);
+        return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(
+                """
+                        <!-- plugin-typst start -->
+                        <script type="module" src="/plugins/plugin-typst/assets/static/typst-all-in-one.js?version=${version}"></script>
+                        <link rel="stylesheet" href="/plugins/plugin-typst/assets/static/typst.css?version=${version}" />
+                        <!-- plugin-typst end -->
+                        """,
+                properties);
     }
 }
