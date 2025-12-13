@@ -65,6 +65,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Typst initialization error:', error);
     typst.compiled = `<p style="color: red;">Typst 初始化失败: ${error instanceof Error ? error.message : '未知错误'}</p>`;
+    await renderTypst(props.content);
   }
 });
 
