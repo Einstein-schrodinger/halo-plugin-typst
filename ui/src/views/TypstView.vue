@@ -217,6 +217,7 @@ onMounted(() => {
 }
 
 .typst-preview {
+  user-select:none;
   padding: 5px;
   height: 100%;
   overflow: auto;
