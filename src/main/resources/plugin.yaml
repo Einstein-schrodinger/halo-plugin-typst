@@ -10,15 +10,15 @@ spec:
   requires: ">=2.21.0"
   author:
     name: sqwfly
-    website: https://github.com/sqwfly
+    website: https://www.sqwfly.top
   logo: static/logo.png
-  homepage: https://github.com/sqwfly/typst#readme
-  repo: https://github.com/sqwfly/typst
-  issues: https://github.com/sqwfly/typst/issues
+  homepage: https://github.com/Einstein-schrodinger/halo-plugin-typst#readme
+  repo: https://github.com/Einstein-schrodinger/halo-plugin-typst
+  issues: https://github.com/Einstein-schrodinger/halo-plugin-typst/issues
   displayName: "Typst"
   description: "为编辑器和文章渲染提供 Typst 支持"
   settingName: plugin-typst-settings
   configMapName: plugin-typst-configMap
   license:
     - name: "GPL-3.0"
-      url: "https://github.com/sqwfly/typst/blob/main/LICENSE"
+      url: "https://github.com/Einstein-schrodinger/halo-plugin-typst/blob/main/LICENSE"

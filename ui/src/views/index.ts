@@ -74,7 +74,7 @@ export const ExtensionTypst = Node.create<TypstOptions>({
                 editor
                   .chain()
                   .focus()
-                  .insertContent({ type: "typst", attrs: { content: "= Hello Typst\n\n" } })
+                  .insertContent({ type: "typst", attrs: { content: "#set page(width:auto, height:auto, margin: 10pt)\n#set text(16pt)\n= Hello Typst!\n" } })
                   .run();
               },
             },
@@ -93,7 +93,7 @@ export const ExtensionTypst = Node.create<TypstOptions>({
               .chain()
               .focus()
               .deleteRange(range)
-              .insertContent({ type: "typst", attrs: { content: "= Hello Typst\n\n" } })
+              .insertContent({ type: "typst", attrs: { content: "#set page(width:auto, height:auto, margin: 10pt)\n#set text(16pt)\n= Hello Typst!\n" } })
               .run();
           },
         };
