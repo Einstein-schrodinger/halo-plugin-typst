@@ -26,7 +26,13 @@ function onEditorChange(value: string) {
 
 // 根据内容动态调整高度
 function adjustHeightByContent(content: string) {
-  if (!content || collapsed.value || fullscreen.value) return;
+  if (collapsed.value || fullscreen.value) return;
+  
+  if (!content) {
+    // 内容为空时恢复到最小高度
+    currentHeight.value = minHeight.value;
+    return;
+  }
   
   const lines = content.split('\n').length;
   const estimatedHeight = Math.max(minHeight.value, lines * 24); // 每行约24px
@@ -295,17 +301,19 @@ onMounted(() => {
   color: #999;
 }
 
+/* 确保代码区和预览区在所有模式下都能独立滚动 */
+.typst-code {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.typst-preview {
+  overflow: auto;
+}
+
 /* 全屏模式下的额外样式 */
 .typst-fullscreen .typst-editor-panel {
   overflow: hidden;
-}
-
-.typst-fullscreen .typst-code {
-  overflow: auto;
-}
-
-.typst-fullscreen .typst-preview {
-  overflow: auto;
 }
 
 /* 确保标题栏在全屏时始终可见 */

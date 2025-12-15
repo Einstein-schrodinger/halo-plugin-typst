@@ -1,7 +1,7 @@
 # halo-plugin-typst
 Typst 插件，这是一个运行在 Halo 建站系统上的插件项目，实现 Typst 代码的在 **默认编辑器** 与文章页的渲染，目前除了注释外，不支持中文，后续会考虑添加对中文的支持，欢迎提出建议和贡献代码。
 
-# 下载方式
+## 下载方式
 1. Halo 应用市场：<https://halo.run/store/apps>
 2. GitHub Releases：访问 [Releases](https://github.com/halo-sigs/halo-plugin-typst/releases) 下载 Assets 中的 JAR 文件。
 
@@ -51,5 +51,5 @@ git clone git@github.com:{your_github_id}/halo-plugin-typst.git
 - [Trae CN](https://www.trae.cn/) 本插件的大部分代码由 Trae CN 协助完成，特别感谢 Trae CN 对本项目的贡献
 
 ## 许可证
-本项目基于 GPL-3.0 许可证开源 - 查看 (LICENSE)[https://github.com/Einstein-schrodinger/halo-plugin-typst/blob/main/LICENSE] 文件了解详情
+本项目基于 GPL-3.0 许可证开源 - 查看 [LICENSE](https://github.com/Einstein-schrodinger/halo-plugin-typst/blob/main/LICENSE) 文件了解详情
 
