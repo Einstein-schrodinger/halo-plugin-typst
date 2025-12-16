@@ -11,7 +11,7 @@ import { markRaw } from "vue";
 import icon from "~icons/simple-icons/typst";
 
 export type TypstOptions = {
-  HTMLAttributes: Record<string, any>;
+  HTMLAttributes: Record<string, string | number | boolean>;
 };
 
 export const ExtensionTypst = Node.create<TypstOptions>({
@@ -28,7 +28,7 @@ export const ExtensionTypst = Node.create<TypstOptions>({
       content: {
         default: "",
         parseHTML: (element: Element) => element.getAttribute("data-content"),
-        renderHTML: (attributes: Record<string, any>) => {
+        renderHTML: (attributes: Record<string, string | number | boolean>) => {
           return !attributes.content
             ? {}
             : {
@@ -45,7 +45,7 @@ export const ExtensionTypst = Node.create<TypstOptions>({
       },
     ];
   },
-  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, any> }) {
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, string | number | boolean> }) {
     return [
       "typst",
       mergeAttributes({
