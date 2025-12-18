@@ -2,7 +2,7 @@
 // 使用prepareUseOnce标志确保初始化只发生一次，以避免重复调用setXXXInitOptions。
 import { $typst } from '@myriaddreamin/typst.ts';
 import { type LoadRemoteFontsOptions, loadFonts } from '@myriaddreamin/typst.ts/options.init'
-import NotoSerifCJKscFont from '@assets/fonts/NotoSerifCJKsc-Regular.otf?url';
+import NotoSerifCJKSCFont from '@assets/fonts/NotoSerifCJKSC-Regular.otf?url';
 
 let initialized = false;
 // 默认加载的字体，cjk使用Google与Adobe推出的思源宋体，默认值的cjk字体库不全
@@ -11,7 +11,7 @@ const loaLoadRemoteFontsOptions:LoadRemoteFontsOptions = {
   assets: ['text', 'emoji'],
 }
 const fontFiles = [
-  NotoSerifCJKscFont,
+  NotoSerifCJKSCFont,
 ];
 export default () => {
   if(!initialized) {
