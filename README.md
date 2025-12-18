@@ -1,5 +1,5 @@
 # halo-plugin-typst
-Typst 插件，这是一个运行在 Halo 建站系统上的插件项目，实现 Typst 代码的在 **默认编辑器** 与文章页的渲染，目前除了注释外，不支持中文，后续会考虑添加对中文的支持，欢迎提出建议和贡献代码。
+Typst 插件，这是一个运行在 Halo 建站系统上的插件项目，实现 Typst 代码的在 **默认编辑器** 与文章页的渲染，[Typst](https://typst.app) 是一种新的基于标记的排版系统，旨在提供与 LaTeX 相似的强大功能，但更易于学习和使用。
 
 ## 下载方式
 1. Halo 应用市场：<https://halo.run/store/apps>
@@ -15,7 +15,7 @@ Typst 插件，这是一个运行在 Halo 建站系统上的插件项目，实�
 3. 该插件更适合解析短代码来生成博客文章的插图，而不是作为 Typst 编辑器来使用，该插件渲染的得到SVG图像可以同时实现高质量和小体积的特点，同时也支持 3D 图像渲染等复杂效果
 
 ## 注意事项
-1. Typst 编辑块 不支持渲染除英文之外的其余字符（注释例外）
+1. Typst 编辑块 支持渲染中文、英文、日文以及emoji表情
 2. Typst 编辑块 不支持导入本地文件
 3. 本插件依赖的核心库 [typst.ts](https://github.com/Myriad-Dreamin/typst.ts) 目前支持的 Typst 版本为 0.14.0，所以在使用时如果你导入的 Typst Package 所依赖的 Typst 版本高于 0.14.0 会导致渲染错误，在确定没有语法问题的情况下渲染失败，大概率是 Package 版本的问题。
 4. 本插件在渲染 Typst 代码时，会将 Typst 代码转换为 SVG 图片，所以在渲染时会有一定的延迟，并占用的一定的资源，请不要渲染过于复杂或大量的 Typst 代码，否则会导致页面卡顿甚至卡死，比如一些包含 3D 图像渲染的 Typst 代码。
@@ -42,8 +42,10 @@ git clone git@github.com:{your_github_id}/halo-plugin-typst.git
 ```
 
 ## 后续计划
-1. 支持中文
-2. 支持本地导入
+1. 支持中文✅️
+2. 支持本地导入 **.typ文件** 
+3. 支持PDF导出
+4. Typst 编辑块 的代码编辑区支持Typst代码高亮
 
 ## 致谢
 - [Myriad-Dreamin/typst.ts](https://github.com/Myriad-Dreamin/typst.ts) 本插件依赖的核心库，感谢该项目的贡献者们
