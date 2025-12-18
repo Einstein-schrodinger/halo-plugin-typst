@@ -1,12 +1,17 @@
-// Prevents reinitialization of compiler and renderer options during HMR (Hot Module Replacement).
-// Use prepareUseOnce flag ensures initialization occurs only once to avoid duplicate calls to setXXXInitOptions.
+// 防止在热模块替换(HMR)期间重新初始化编译器和渲染器选项。
+// 使用prepareUseOnce标志确保初始化只发生一次，以避免重复调用setXXXInitOptions。
 import { $typst } from '@myriaddreamin/typst.ts';
+import { preloadFontAssets } from '@myriaddreamin/typst.ts/options.init'
 
 let initialized = false;
 export default () => {
   if(!initialized) {
     $typst.setCompilerInitOptions({
-      beforeBuild: [],
+      beforeBuild: [
+        preloadFontAssets({
+          assets: ['text', 'cjk', 'emoji'], // 加载所有类型的默认字体
+        }),
+      ],
       getModule: () =>
         new URL(
           '@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm',
