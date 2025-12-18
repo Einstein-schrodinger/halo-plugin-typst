@@ -9,6 +9,7 @@ export default rsbuildConfig({
       alias: {
         "@": "./src",
         "@components": "./src/components",
+        "@assets": "./src/assets",
       },
     },
     plugins: [pluginSass()],
@@ -20,6 +21,13 @@ export default rsbuildConfig({
             {
               test: /\.wasm$/,
               type: "asset/resource",
+            },
+            {
+              test: /\.(woff|woff2|eot|ttf|otf)$/,
+              type: "asset/resource",
+              generator: {
+                filename: "assets/fonts/[name][ext]",
+              },
             },
           ],
         },

@@ -18,11 +18,15 @@ public class TypstJSInjector {
           
           document.getElementById('typst').addEventListener('load', async function () {
             const initOptionsModule = await import('https://cdn.jsdelivr.net/npm/@myriaddreamin/typst.ts@0.7.0-rc1/dist/esm/options.init.mjs');
+            const loaLoadRemoteFontsOptions = {
+              assets: ['text', 'emoji'],
+            }
+            const fontFiles = [
+              '/plugins/plugin-typst/assets/static/NotoSerifCJKSC-Regular.otf',
+            ];
             $typst.setCompilerInitOptions({
               beforeBuild: [
-                initOptionsModule.preloadFontAssets({
-                  assets: ['text', 'cjk', 'emoji'],
-                }),
+                initOptionsModule.loadFonts(fontFiles, loaLoadRemoteFontsOptions),
               ],
               getModule: () =>
                 'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler@0.7.0-rc1/pkg/typst_ts_web_compiler_bg.wasm',
