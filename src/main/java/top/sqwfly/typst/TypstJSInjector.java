@@ -1,7 +1,7 @@
 package top.sqwfly.typst;
 
 public class TypstJSInjector {
-    static String getParsedTypstScript(String typstSelector) {
+    static String getParsedTypstScript(String typstSelector, String typstFontUrl) {
         String typstScript = """
         <script>
           function previewSvg(selector) {
@@ -21,12 +21,12 @@ public class TypstJSInjector {
             const loaLoadRemoteFontsOptions = {
               assets: ['text', 'emoji'],
             }
-            const fontFiles = [
-              '/plugins/plugin-typst/assets/static/NotoSerifCJKSC-Regular.otf',
+            const typstFontUrls = [
+              '%s',
             ];
             $typst.setCompilerInitOptions({
               beforeBuild: [
-                initOptionsModule.loadFonts(fontFiles, loaLoadRemoteFontsOptions),
+                initOptionsModule.loadFonts(typstFontUrls, loaLoadRemoteFontsOptions),
               ],
               getModule: () =>
                 'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler@0.7.0-rc1/pkg/typst_ts_web_compiler_bg.wasm',
@@ -39,6 +39,6 @@ public class TypstJSInjector {
           });
           </script>
          """;
-        return String.format(typstScript, typstSelector);
+        return String.format(typstScript, typstFontUrl, typstSelector);
     }
 }

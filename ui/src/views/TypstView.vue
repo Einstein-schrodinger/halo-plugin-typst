@@ -4,7 +4,7 @@ import { onMounted, onUnmounted, ref, watch } from "vue";
 import IcOutlineFullscreen from "~icons/ic/outline-fullscreen";
 import IcOutlineFullscreenExit from "~icons/ic/outline-fullscreen-exit";
 import IcOutlineTipsAndUpdates from "~icons/ic/outline-tips-and-updates";
-import TypstRenderer from "@components/TypstRenderer.vue";
+import TypstRenderer from "@/components/TypstRenderer.vue";
 
 const props = defineProps(nodeViewProps);
 const fullscreen = ref(false);

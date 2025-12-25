@@ -11,7 +11,19 @@ import { markRaw } from "vue";
 import icon from "~icons/simple-icons/typst";
 
 export type TypstOptions = {
-  HTMLAttributes: Record<string, string | number | boolean>;
+  HTMLAttributes?: Record<string, string | number | boolean>;
+  getToolboxItems?: ({ editor }: { editor: Editor }) => Array<{
+    priority: number;
+    component: unknown;
+    props: Record<string, unknown>;
+  }>;
+  getCommandMenuItems?: () => {
+    priority: number;
+    icon: unknown;
+    title: string;
+    keywords: string[];
+    command: ({ editor, range }: { editor: Editor; range: Range }) => void;
+  };
 };
 
 export const ExtensionTypst = Node.create<TypstOptions>({

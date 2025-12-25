@@ -14,15 +14,15 @@ import run.halo.app.theme.ReactiveSinglePageContentHandler;
 public class DefaultSinglePageContentHandler implements ReactiveSinglePageContentHandler {
     private final ReactiveSettingFetcher reactiveSettingFetcher;
 
-    private static void injectJS(SinglePageContentContext contentContext, String typstSelector) {
-        String parsedTypstScript = TypstJSInjector.getParsedTypstScript(typstSelector);
+    private static void injectJS(SinglePageContentContext contentContext, String typstSelector, String typstFontUrl) {
+        String parsedTypstScript = TypstJSInjector.getParsedTypstScript(typstSelector, typstFontUrl);
         contentContext.setContent(contentContext.getContent() + "\n" + parsedTypstScript);
     }
 
     @Override
     public Mono<SinglePageContentContext> handle(SinglePageContentContext contentContext) {
         return reactiveSettingFetcher.fetch("basic", BasicConfig.class).map(basicConfig -> {
-            injectJS(contentContext, basicConfig.getTypstSelector());
+            injectJS(contentContext, basicConfig.getTypstSelector(), basicConfig.getTypstFontUrl());
             return contentContext;
         }).onErrorResume(e -> {
             log.error("Typst PostContent handle failed", Throwables.getRootCause(e));

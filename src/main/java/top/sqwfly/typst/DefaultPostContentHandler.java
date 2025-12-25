@@ -14,15 +14,16 @@ import run.halo.app.theme.ReactivePostContentHandler;
 public class DefaultPostContentHandler implements ReactivePostContentHandler {
     private final ReactiveSettingFetcher reactiveSettingFetcher;
 
-    private static void injectJS(PostContentContext contentContext, String typstSelector) {
-        String parsedTypstScript = TypstJSInjector.getParsedTypstScript(typstSelector);
+    private static void injectJS(PostContentContext contentContext, String typstSelector, String typstFontUrl) {
+        String parsedTypstScript = TypstJSInjector.getParsedTypstScript(typstSelector, typstFontUrl);
         contentContext.setContent(contentContext.getContent() + "\n" + parsedTypstScript);
     }
 
     @Override
     public Mono<PostContentContext> handle(PostContentContext contentContext) {
         return reactiveSettingFetcher.fetch("basic", BasicConfig.class).map(basicConfig -> {
-            injectJS(contentContext, basicConfig.getTypstSelector());
+            injectJS(contentContext, basicConfig.getTypstSelector(), basicConfig.getTypstFontUrl());
+            System.out.println(basicConfig.getTypstFontUrl());
             return contentContext;
         }).onErrorResume(e -> {
             log.error("Typst PostContent handle failed", Throwables.getRootCause(e));

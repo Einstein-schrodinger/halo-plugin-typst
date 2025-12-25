@@ -12,3 +12,8 @@ spec:
           label: typst-CSS选择器
           value: "typst[data-type=typst]"
           help: 用于匹配typst的CSS选择器
+        - $formkit: text
+          name: typstFontUrl
+          label: typst-字体文件地址
+          value: ""
+          help: 用于渲染typst中的中日韩等文字

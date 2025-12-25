@@ -7,12 +7,12 @@ metadata:
   name: plugin-typst
 spec:
   enabled: true
-  requires: ">=2.21.0"
+  requires: ">=2.22.0"
   author:
     name: sqwfly
     website: https://www.sqwfly.top
   logo: static/logo.png
-  homepage: https://github.com/Einstein-schrodinger/halo-plugin-typst#readme
+  homepage: https://www.sqwfly.top
   repo: https://github.com/Einstein-schrodinger/halo-plugin-typst
   issues: https://github.com/Einstein-schrodinger/halo-plugin-typst/issues
   displayName: "Typst"
