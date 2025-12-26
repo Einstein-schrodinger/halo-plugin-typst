@@ -1,7 +1,7 @@
 // 防止在热模块替换(HMR)期间重新初始化编译器和渲染器选项。
 // 使用prepareUseOnce标志确保初始化只发生一次，以避免重复调用setXXXInitOptions。
 import { $typst } from '@myriaddreamin/typst.ts';
-import { type LoadRemoteFontsOptions, loadFonts } from '@myriaddreamin/typst.ts/options.init'
+import { type LoadRemoteFontsOptions, loadFonts } from '@myriaddreamin/typst.ts/options.init';
 import { getTypstFontUrl } from '@/utils';
 
 let initialized = false;
