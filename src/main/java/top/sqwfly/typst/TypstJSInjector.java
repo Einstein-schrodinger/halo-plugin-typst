@@ -17,7 +17,7 @@ public class TypstJSInjector {
           }
           
           document.getElementById('typst').addEventListener('load', async function () {
-            const initOptionsModule = await import('https://cdn.jsdelivr.net/npm/@myriaddreamin/typst.ts@0.7.0-rc1/dist/esm/options.init.mjs');
+            const initOptionsModule = await import('https://cdn.jsdelivr.net/npm/@myriaddreamin/typst.ts@0.7.0-rc2/dist/esm/options.init.mjs');
             const loaLoadRemoteFontsOptions = {
               assets: ['text', 'emoji'],
             }
@@ -29,11 +29,11 @@ public class TypstJSInjector {
                 initOptionsModule.loadFonts(typstFontUrls, loaLoadRemoteFontsOptions),
               ],
               getModule: () =>
-                'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler@0.7.0-rc1/pkg/typst_ts_web_compiler_bg.wasm',
+                'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler@0.7.0-rc2/pkg/typst_ts_web_compiler_bg.wasm',
             });
             $typst.setRendererInitOptions({
               getModule: () =>
-                'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer@0.7.0-rc1/pkg/typst_ts_renderer_bg.wasm',
+                'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer@0.7.0-rc2/pkg/typst_ts_renderer_bg.wasm',
             });
             previewSvg('%s');
           });

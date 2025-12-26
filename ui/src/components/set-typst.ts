@@ -10,6 +10,8 @@ let initialized = false;
 const loaLoadRemoteFontsOptions:LoadRemoteFontsOptions = {
   assets: ['text', 'emoji'],
 }
+const compilerUrl = 'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler@0.7.0-rc2/pkg/typst_ts_web_compiler_bg.wasm';
+const rendererUrl = 'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer@0.7.0-rc2/pkg/typst_ts_renderer_bg.wasm';
 
 export default async () => {
   const typstFontUrl = await getTypstFontUrl();
@@ -21,20 +23,12 @@ export default async () => {
       beforeBuild: [
         loadFonts(typstFontUrls, loaLoadRemoteFontsOptions),
       ],
-      getModule: () =>
-        new URL(
-          '@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm',
-          import.meta.url
-        ).toString(),
+      getModule: () => compilerUrl,
     });
   
     $typst.setRendererInitOptions({
       beforeBuild: [],
-      getModule: () =>
-        new URL(
-          '@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm',
-          import.meta.url
-        ).toString(),
+      getModule: () => rendererUrl,
     });
     initialized = true;
   }
