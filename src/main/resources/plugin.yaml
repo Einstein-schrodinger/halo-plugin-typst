@@ -16,7 +16,7 @@ spec:
   repo: https://github.com/Einstein-schrodinger/halo-plugin-typst
   issues: https://github.com/Einstein-schrodinger/halo-plugin-typst/issues
   displayName: "Typst"
-  description: "为编辑器和文章渲染提供 Typst 支持"
+  description: "为默认编辑器和文章渲染提供 Typst 支持"
   settingName: plugin-typst-settings
   configMapName: plugin-typst-configMap
   license:
