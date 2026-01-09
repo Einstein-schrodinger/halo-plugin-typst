@@ -156,7 +156,7 @@ onMounted(() => {
       </div>
     </div>
     <div v-if="collapsed && !fullscreen" class="typst-collapsed-hint">
-      <span>Typst 内容块已折叠</span>
+      <span>Typst 编辑块已折叠</span>
     </div>
     <div class="typst-editor-panel" :class="{ 'typst-collapsed': collapsed && !fullscreen }" :style="{ height: (collapsed && !fullscreen) ? '0px' : (fullscreen ? '100%' : currentHeight + 'px') }">
       <div class="typst-code">
