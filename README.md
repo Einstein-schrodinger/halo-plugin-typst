@@ -1,5 +1,5 @@
 # halo-plugin-typst
-Typst 插件，实现 Typst 代码的在 **默认编辑器** 与文章页的渲染，Typst 是一种新的基于标记的排版系统，旨在提供与 LaTeX 相似的强大功能，但更易于学习和使用，可以像 Markdown 一样快速上手。
+Typst 插件，实现 Typst 代码在 **默认编辑器** 与文章页的渲染，[Typst](https://typst.app/) 是一种新的基于标记的排版系统，旨在提供与 LaTeX 相似的强大功能，但更易于学习和使用，可以像 Markdown 一样快速上手。
 
 ## 效果预览
 ![](https://www.sqwfly.top/upload/typst_plugin_20260109195534.avif)
