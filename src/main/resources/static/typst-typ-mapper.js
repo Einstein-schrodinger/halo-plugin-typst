@@ -35,21 +35,46 @@ export class TypstTypMapper {
   extractTypstFiles(typstCode) {
     const files = [];
     
-    // 构建正则表达式，匹配所有支持的 Typst 文件语句
-    const typstRegex = /(#?)(include|import)\s*"([^"]+)"\s*(?::\s*([^,]+)|,\s*([^,]+))?/g;
+    // 匹配 include 语句
+    const includeRegex = /(#?)include\s*"([^"]+)"\s*(?:,\s*([^,]+))?/g;
+    
+    // 改进的 import 正则表达式，支持多个导入项
+    // 匹配格式: import "path": item1, item2 as alias2, item3
+    const importRegex = /(#?)import\s*"([^"]+)"\s*:\s*([^,]+(?:\s*,\s*[^,]+)*)/g;
     
     let match;
-    while ((match = typstRegex.exec(typstCode)) !== null) {
+    
+    // 匹配 include 语句
+    while ((match = includeRegex.exec(typstCode)) !== null) {
       const fullMatch = match[0];
       const hasHash = match[1] === '#';
-      const type = match[2]; // 'include' 或 'import'
-      const path = match[3];
-      const parameters = match[4] || match[5] || '';
+      const path = match[2];
+      const parameters = match[3] || '';
       
       if (this.isTypstFilePath(path)) {
         files.push({
           fullMatch,
-          type,
+          type: 'include',
+          path,
+          startIndex: match.index,
+          endIndex: match.index + fullMatch.length,
+          hasHash,
+          parameters: parameters.trim()
+        });
+      }
+    }
+    
+    // 匹配 import 语句
+    while ((match = importRegex.exec(typstCode)) !== null) {
+      const fullMatch = match[0];
+      const hasHash = match[1] === '#';
+      const path = match[2];
+      const parameters = match[3] || '';
+      
+      if (this.isTypstFilePath(path)) {
+        files.push({
+          fullMatch,
+          type: 'import',
           path,
           startIndex: match.index,
           endIndex: match.index + fullMatch.length,

@@ -53,9 +53,12 @@ export class TypstTypMapper {
   extractTypstFiles(typstCode: string): ExtractedTypstFile[] {
     const files: ExtractedTypstFile[] = [];
     
-    // 构建正则表达式，匹配 include 和 import 语句
+    // 匹配 include 语句
     const includeRegex = /(#?)include\s*"([^"]+)"\s*(?:,\s*([^,]+))?/g;
-    const importRegex = /(#?)import\s*"([^"]+)"\s*:\s*([^,]+)/g;
+    
+    // 改进的 import 正则表达式，支持多个导入项
+    // 匹配格式: import "path": item1, item2 as alias2, item3
+    const importRegex = /(#?)import\s*"([^"]+)"\s*:\s*([^,]+(?:\s*,\s*[^,]+)*)/g;
     
     let match;
     
@@ -116,29 +119,31 @@ export class TypstTypMapper {
 
   // 生成映射后的路径（如 /bar.typ）
   private generateMappedPath(originalPath: string): string {
-    // 如果是 @preview/ 包引用，保持原样
-    if (originalPath.startsWith('@preview/')) {
-      return originalPath;
-    }
-    
-    // 如果是 URL，提取文件名
-    if (originalPath.startsWith('http://') || originalPath.startsWith('https://')) {
-      try {
-        const url = new URL(originalPath);
-        const pathname = url.pathname;
-        const filename = pathname.split('/').pop() || 'file';
-        
-        // 确保扩展名正确
-        const nameWithoutExt = filename.replace(/\.\w+$/, '');
-        return `/${nameWithoutExt}${TYPST_EXTENSION}`;
-      } catch (error) {
-        console.warn('Failed to parse URL:', originalPath, error);
+    try {
+      // 如果是 @preview/ 包引用，保持原样
+      if (originalPath.startsWith('@preview/')) {
         return originalPath;
       }
+      
+      // 如果是相对路径或绝对路径，直接使用文件名
+      if (originalPath.startsWith('/') || !originalPath.includes('://')) {
+        const filename = originalPath.split('/').pop() || 'file';
+        const nameWithoutExt = filename.replace(/\.\w+$/, '');
+        return `/${nameWithoutExt}${TYPST_EXTENSION}`;
+      }
+      
+      // 如果是 URL，提取文件名
+      const url = new URL(originalPath);
+      const pathname = url.pathname;
+      const filename = pathname.split('/').pop() || 'file';
+      const nameWithoutExt = filename.replace(/\.\w+$/, '');
+      return `/${nameWithoutExt}${TYPST_EXTENSION}`;
+    } catch (error) {
+      // 如果不是有效的 URL，直接使用文件名
+      const filename = originalPath.split('/').pop() || 'file';
+      const nameWithoutExt = filename.replace(/\.\w+$/, '');
+      return `/${nameWithoutExt}${TYPST_EXTENSION}`;
     }
-    
-    // 其他情况保持原样
-    return originalPath;
   }
 
   // 映射单个 Typst 文件
@@ -167,29 +172,18 @@ export class TypstTypMapper {
         };
       }
 
-      // 如果是 URL，需要获取内容
-      if (typstPath.startsWith('http://') || typstPath.startsWith('https://')) {
-        // 确保编译器已初始化
-        await this.initCompiler();
+      // 确保编译器已初始化
+      await this.initCompiler();
 
-        // 获取 Typst 文件内容
-        const typstContent = await this.fetchTypstContent(typstPath);
-        
-        // 映射到编译器
-        await this.compiler.mapShadow(mappedPath, typstContent);
-        
-        // 缓存映射结果
-        this.mappingCache.set(typstPath, mappedPath);
-        
-        return {
-          originalPath: typstPath,
-          mappedPath,
-          success: true
-        };
-      }
+      // 获取 Typst 文件内容
+      const typstContent = await this.fetchTypstContent(typstPath);
       
-      // 其他情况（相对路径、绝对路径等）直接返回
+      // 映射到编译器
+      await this.compiler.mapShadow(mappedPath, typstContent);
+      
+      // 缓存映射结果
       this.mappingCache.set(typstPath, mappedPath);
+      
       return {
         originalPath: typstPath,
         mappedPath,
@@ -259,12 +253,7 @@ export class TypstTypMapper {
   async unmapFile(originalPath: string): Promise<void> {
     if (this.mappingCache.has(originalPath)) {
       const mappedPath = this.mappingCache.get(originalPath)!;
-      
-      // 只移除 URL 文件的映射
-      if (originalPath.startsWith('http://') || originalPath.startsWith('https://')) {
-        await this.compiler.unmapShadow(mappedPath);
-      }
-      
+      await this.compiler.unmapShadow(mappedPath);
       this.mappingCache.delete(originalPath);
     }
   }
