@@ -7,29 +7,33 @@ import { getTypstFontUrl } from '@/utils';
 let initialized = false;
 // 默认加载的字体，cjk使用Google与Adobe推出的思源宋体，默认值的cjk字体库不全
 // assets: ['text', 'cjk', 'emoji']
-const loaLoadRemoteFontsOptions:LoadRemoteFontsOptions = {
+const loadRemoteFontsOptions:LoadRemoteFontsOptions = {
   assets: ['text', 'emoji'],
 }
 const compilerUrl = 'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-web-compiler@0.7.0-rc2/pkg/typst_ts_web_compiler_bg.wasm';
 const rendererUrl = 'https://cdn.jsdelivr.net/npm/@myriaddreamin/typst-ts-renderer@0.7.0-rc2/pkg/typst_ts_renderer_bg.wasm';
 
 export default async () => {
-  const typstFontUrl = await getTypstFontUrl();
-  const typstFontUrls = [
-    typstFontUrl
-  ];
-  if(!initialized) {
+  if (initialized) return;
+  
+  try {
+    const typstFontUrl = await getTypstFontUrl();
+    const typstFontUrls = [typstFontUrl];
+    
     $typst.setCompilerInitOptions({
       beforeBuild: [
-        loadFonts(typstFontUrls, loaLoadRemoteFontsOptions),
+        loadFonts(typstFontUrls, loadRemoteFontsOptions),
       ],
       getModule: () => compilerUrl,
     });
-  
     $typst.setRendererInitOptions({
       beforeBuild: [],
       getModule: () => rendererUrl,
     });
+    
     initialized = true;
+  } catch (error) {
+    console.error('Failed to initialize Typst:', error);
+    throw error;
   }
 };

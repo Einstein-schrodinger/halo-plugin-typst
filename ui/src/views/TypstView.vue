@@ -163,6 +163,7 @@ onMounted(() => {
         <VCodemirror
           :model-value="props.node.attrs.content || ''"
           height="100%"
+          language="yaml"
           @change="onEditorChange"
           @focus="onEditorFocus"
           @blur="onEditorBlur"
