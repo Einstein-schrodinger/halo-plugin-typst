@@ -79,7 +79,6 @@ onMounted(async () => {
 watch(
   () => content.value,
   async (newVal) => {
-    console.log('newVal', newVal)
     if (props.autoRender) {
       await debouncedRender(newVal)
     }
