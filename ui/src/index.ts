@@ -1,4 +1,5 @@
 import { definePlugin } from "@halo-dev/ui-shared";
+import "./style/index.css";
 
 export default definePlugin({
   components: {},
