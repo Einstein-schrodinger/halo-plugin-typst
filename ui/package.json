@@ -37,6 +37,7 @@
     "@iconify/json": "^2.2.421",
     "@rsbuild/core": "^1.6.15",
     "@rsbuild/plugin-sass": "^1.4.0",
+    "@rspack/core": "^1.7.2",
     "@tsconfig/node20": "^20.1.8",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20.19.27",

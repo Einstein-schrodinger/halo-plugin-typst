@@ -1,23 +1,21 @@
-/* Typst 文章页渲染样式 */
-typst[data-type="typst"] {
+typst[data-type='typst'] {
   display: block;
   margin: 1em 0;
 }
 
-typst[data-type="typst"] svg {
+typst[data-type='typst'] svg {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
 }
 
-typst[data-type="typst"]:empty {
+typst[data-type='typst']:empty {
   display: none;
 }
 
-/* 响应式设计 */
 @media (max-width: 768px) {
-  typst[data-type="typst"] {
+  typst[data-type='typst'] {
     margin: 0.5em 0;
   }
 }

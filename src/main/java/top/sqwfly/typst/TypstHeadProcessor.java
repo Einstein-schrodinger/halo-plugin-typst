@@ -35,7 +35,6 @@ public class TypstHeadProcessor implements TemplateHeadProcessor {
         return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(
                 """
                         <!-- plugin-typst start -->
-                        <script type="module" id="typst" src="https://cdn.jsdelivr.net/npm/@myriaddreamin/typst.ts@0.7.0-rc2/dist/esm/contrib/all-in-one-lite.bundle.js"></script>
                         <link rel="stylesheet" href="/plugins/plugin-typst/assets/static/typst.css?version=${version}" />
                         <!-- plugin-typst end -->
                         """,

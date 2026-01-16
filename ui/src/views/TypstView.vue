@@ -1,81 +1,81 @@
 <script lang="ts" setup>
-import { nodeViewProps, NodeViewWrapper } from "@halo-dev/richtext-editor";
-import { onMounted, onUnmounted, ref, watch } from "vue";
-import IcOutlineFullscreen from "~icons/ic/outline-fullscreen";
-import IcOutlineFullscreenExit from "~icons/ic/outline-fullscreen-exit";
-import IcOutlineTipsAndUpdates from "~icons/ic/outline-tips-and-updates";
-import TypstRenderer from "@/components/TypstRenderer.vue";
+import { nodeViewProps, NodeViewWrapper } from '@halo-dev/richtext-editor'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import IcOutlineFullscreen from '~icons/ic/outline-fullscreen'
+import IcOutlineFullscreenExit from '~icons/ic/outline-fullscreen-exit'
+import IcOutlineTipsAndUpdates from '~icons/ic/outline-tips-and-updates'
+import TypstRenderer from '@/components/TypstRenderer.vue'
 
-const props = defineProps(nodeViewProps);
-const fullscreen = ref(false);
-const collapsed = ref(false);
-const minHeight = ref(120); // 3-5行的高度（约120px）
-const currentHeight = ref(minHeight.value);
-const isEditing = ref(false);
+const props = defineProps(nodeViewProps)
+const fullscreen = ref(false)
+const collapsed = ref(false)
+const minHeight = ref(120) // 3-5行的高度（约120px）
+const currentHeight = ref(minHeight.value)
+const isEditing = ref(false)
 
 // typst editor
 function onEditorChange(value: string) {
   try {
-    props.updateAttributes({ content: value });
+    props.updateAttributes({ content: value })
     // 编辑时动态调整高度
-    adjustHeightByContent(value);
+    adjustHeightByContent(value)
   } catch (error) {
-    console.error('Failed to update Typst content:', error);
+    console.error('Failed to update Typst content:', error)
   }
 }
 
 // 根据内容动态调整高度
 function adjustHeightByContent(content: string) {
-  if (collapsed.value || fullscreen.value) return;
-  
+  if (collapsed.value || fullscreen.value) return
+
   if (!content) {
     // 内容为空时恢复到最小高度
-    currentHeight.value = minHeight.value;
-    return;
+    currentHeight.value = minHeight.value
+    return
   }
-  
-  const lines = content.split('\n').length;
-  const estimatedHeight = Math.max(minHeight.value, lines * 24); // 每行约24px
-  const maxHeight = 400; // 最大高度限制
-  currentHeight.value = Math.min(estimatedHeight, maxHeight);
+
+  const lines = content.split('\n').length
+  const estimatedHeight = Math.max(minHeight.value, lines * 24) // 每行约24px
+  const maxHeight = 400 // 最大高度限制
+  currentHeight.value = Math.min(estimatedHeight, maxHeight)
 }
 
 // 监听折叠状态变化
 watch(collapsed, (newCollapsed) => {
   if (!newCollapsed && !fullscreen.value) {
     // 展开时重新计算高度
-    const content = props.node.attrs.content || '';
+    const content = props.node.attrs.content || ''
     if (content) {
-      adjustHeightByContent(content);
+      adjustHeightByContent(content)
     }
   }
-});
+})
 
 // 监听全屏状态变化
 watch(fullscreen, (newFullscreen) => {
   if (newFullscreen) {
     // 进入全屏时自动展开
-    collapsed.value = false;
+    collapsed.value = false
   } else if (!collapsed.value) {
     // 退出全屏时重新计算高度
-    const content = props.node.attrs.content || '';
+    const content = props.node.attrs.content || ''
     if (content) {
-      adjustHeightByContent(content);
+      adjustHeightByContent(content)
     }
   }
-});
+})
 
 // 监听编辑器焦点事件
 function onEditorFocus() {
-  isEditing.value = true;
+  isEditing.value = true
 }
 
 function onEditorBlur() {
-  isEditing.value = false;
+  isEditing.value = false
   // 如果不在编辑状态且内容较少，恢复到最小高度
-  const content = props.node.attrs.content || '';
+  const content = props.node.attrs.content || ''
   if (content.split('\n').length <= 5) {
-    currentHeight.value = minHeight.value;
+    currentHeight.value = minHeight.value
   }
 }
 
@@ -83,73 +83,77 @@ onMounted(() => {
   // 添加ESC键退出全屏的监听
   const handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Escape' && fullscreen.value) {
-      fullscreen.value = false;
-      event.preventDefault();
-      event.stopPropagation();
+      fullscreen.value = false
+      event.preventDefault()
+      event.stopPropagation()
     }
-  };
-  
-  document.addEventListener('keydown', handleKeydown, true);
-  
+  }
+
+  document.addEventListener('keydown', handleKeydown, true)
+
   // 清理函数
   const cleanup = () => {
-    document.removeEventListener('keydown', handleKeydown, true);
-  };
-  
+    document.removeEventListener('keydown', handleKeydown, true)
+  }
+
   // 组件卸载时清理事件监听
   onUnmounted(() => {
-    cleanup();
-  });
-  
+    cleanup()
+  })
+
   watch(
     () => props.node.attrs.content,
     (newContent) => {
       // 初始化时调整高度
       if (newContent && !collapsed.value && !fullscreen.value) {
-        adjustHeightByContent(newContent);
+        adjustHeightByContent(newContent)
       }
-    }
-  );
+    },
+  )
   // 初始化高度
-  const initialContent = props.node.attrs.content || '';
+  const initialContent = props.node.attrs.content || ''
   if (initialContent && !collapsed.value && !fullscreen.value) {
-    adjustHeightByContent(initialContent);
+    adjustHeightByContent(initialContent)
   }
-});
+})
 </script>
 <template>
-  <node-view-wrapper
-    class="typst-container"
-    :class="{ 'typst-fullscreen': fullscreen }"
-  >
+  <node-view-wrapper class="typst-container" :class="{ 'typst-fullscreen': fullscreen }">
     <div class="typst-nav">
       <div class="typst-nav-start">
         <div>Typst 编辑块</div>
-        <a
-          v-tooltip="`查阅 Typst 的文档`"
-          href="https://typst.app/docs/"
-          target="_blank"
-        >
+        <a v-tooltip="`查阅 Typst 的文档`" href="https://typst.app/docs/" target="_blank">
           <IcOutlineTipsAndUpdates />
         </a>
       </div>
       <div class="typst-nav-end">
-        <div
-          v-if="!fullscreen"
-          class="typst-collapse-icon"
-          @click="collapsed = !collapsed"
-        >
-          <svg v-if="collapsed" v-tooltip="'展开'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div v-if="!fullscreen" class="typst-collapse-icon" @click="collapsed = !collapsed">
+          <svg
+            v-if="collapsed"
+            v-tooltip="'展开'"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
-          <svg v-else v-tooltip="'折叠'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            v-else
+            v-tooltip="'折叠'"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
         </div>
-        <div
-          class="typst-fullscreen-icon"
-          @click="fullscreen = !fullscreen"
-        >
+        <div class="typst-fullscreen-icon" @click="fullscreen = !fullscreen">
           <IcOutlineFullscreenExit v-if="fullscreen" v-tooltip="'退出全屏'" />
           <IcOutlineFullscreen v-else v-tooltip="'全屏'" />
         </div>
@@ -158,7 +162,13 @@ onMounted(() => {
     <div v-if="collapsed && !fullscreen" class="typst-collapsed-hint">
       <span>Typst 编辑块已折叠</span>
     </div>
-    <div class="typst-editor-panel" :class="{ 'typst-collapsed': collapsed && !fullscreen }" :style="{ height: (collapsed && !fullscreen) ? '0px' : (fullscreen ? '100%' : currentHeight + 'px') }">
+    <div
+      class="typst-editor-panel"
+      :class="{ 'typst-collapsed': collapsed && !fullscreen }"
+      :style="{
+        height: collapsed && !fullscreen ? '0px' : fullscreen ? '100%' : currentHeight + 'px',
+      }"
+    >
       <div class="typst-code">
         <VCodemirror
           :model-value="props.node.attrs.content || ''"
@@ -170,7 +180,7 @@ onMounted(() => {
         />
       </div>
       <div class="typst-preview" contenteditable="false">
-        <TypstRenderer :content="props.node.attrs.content || ''" />
+        <TypstRenderer v-bind="props" auto-render />
       </div>
     </div>
   </node-view-wrapper>
@@ -224,7 +234,7 @@ onMounted(() => {
 }
 
 .typst-preview {
-  user-select:none;
+  user-select: none;
   padding: 5px;
   height: 100%;
   overflow: auto;

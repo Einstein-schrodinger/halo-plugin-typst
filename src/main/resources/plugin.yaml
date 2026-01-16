@@ -11,7 +11,7 @@ spec:
   author:
     name: sqwfly
     website: https://www.sqwfly.top
-  logo: static/logo.png
+  logo: logo.png
   homepage: https://www.sqwfly.top
   repo: https://github.com/Einstein-schrodinger/halo-plugin-typst
   issues: https://github.com/Einstein-schrodinger/halo-plugin-typst/issues
