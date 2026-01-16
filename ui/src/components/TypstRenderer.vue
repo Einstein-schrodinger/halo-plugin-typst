@@ -77,10 +77,11 @@ onMounted(async () => {
 
 // 监听内容变化
 watch(
-  () => content,
+  () => content.value,
   async (newVal) => {
+    console.log('newVal', newVal)
     if (props.autoRender) {
-      await debouncedRender(newVal.value)
+      await debouncedRender(newVal)
     }
   },
   {
