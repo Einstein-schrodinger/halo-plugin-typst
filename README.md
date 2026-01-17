@@ -12,7 +12,7 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 >
 >[**EasePaper**](https://github.com/Dawnfz-Lenfeng/easy-paper)
 
-![](https://www.sqwfly.top/upload/typst_plugin_20260114175509.avif)
+![](https://www.sqwfly.top/upload/plugin_typst_20260114175509.avif)
 
 ### 片段代码渲染
 
@@ -22,10 +22,10 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 >
 >2.[**physica**](https://typst.app/universe/package/physica)
 
-![](https://www.sqwfly.top/upload/typst_plugin_20260109195534.avif)
+![](https://www.sqwfly.top/upload/plugin_typst_20260109195534.avif)
 
 全屏编辑模式：
-![](https://www.sqwfly.top/upload/typst_plugin_20260109195556.avif)
+![](https://www.sqwfly.top/upload/plugin_typst_20260109195556.avif)
 
 ## 下载方式
 
@@ -35,11 +35,11 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 ## 使用方式
 
 1. 在默认编辑器的菜单栏中点击 **+** 插入 **Typst 编辑块**
-   ![](https://www.sqwfly.top/upload/typst_plugin_20260109200224.avif)
+   ![](https://www.sqwfly.top/upload/plugin_typst_20260109200224.avif)
 
 2. 在默认编辑器中点击左侧的菜单按钮 **+** 插入 **Typst 编辑块**
 
-   ![](https://www.sqwfly.top/upload/typst_plugin_20260114180858.avif)
+   ![](https://www.sqwfly.top/upload/plugin_typst_20260114180858.avif)
 
 ## 使用建议与指南
 
@@ -48,7 +48,7 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 2. 你还可以浏览官网提供的 [Typst Packages](https://typst.app/universe/search/?kind=packages) 来给内容提供不同的展示形式，这里的 Package 与 Halo 应用市场中的插件类似
 
 3. Typst 编辑块 默认支持渲染英文和emoji表情，如果你需要渲染中日韩文字，你需要在配置项中配置字体，**使用完整的url地址并且不得跨域，不支持woff以及woff2字体**
-   ![](https://www.sqwfly.top/upload/typst_plugin_20260109200555.avif)
+   ![](https://www.sqwfly.top/upload/plugin_typst_20260109200555.avif)
 
 4. 任何资源的导入需要**使用完整的url地址并且不得跨域**，下面提供一些示例供使用者参考，域名需要替换为你自己的站点域名，其余路径根据资源位置进行调整
 
@@ -74,11 +74,11 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 
 5. 删除时双击标题栏选中 Typst 编辑块，然后删除，或者点击左侧的菜单按钮进行删除
 
-   ![](https://www.sqwfly.top/upload/typst_plugin_20260114181008.avif)
+   ![](https://www.sqwfly.top/upload/plugin_typst_20260114181008.avif)
 
 ## 注意事项
 
-1. 本插件会编译并渲染 Typst 代码为 SVG 图片，所以整个过程需要一定的时间，并占用一定的资源，请不要在“简陋”的服务器上书写过于复杂或大量的 Typst 代码，否则会导致页面卡顿甚至卡死，**初次渲染时请耐心等待，可能需要1~3分钟（也与加载的自定义字体文件大小有关）**，好在经过 **[LIGG](https://github.com/Einstein-schrodinger/halo-plugin-typst/pull/1)** 的优化，现在只需要编辑器渲染完毕，主题端会直接加载其渲染结果，无需二次编译与渲染，对于访客来言是无感的
+1. 本插件会编译并渲染 Typst 代码为 SVG 图片，所以整个过程需要一定的时间，并占用一定的资源，请不要在“简陋”的服务器上书写过于复杂或大量的 Typst 代码，否则会导致页面卡顿甚至卡死，**初次渲染时请耐心等待，可能需要1~3分钟（也与加载的自定义字体文件大小有关）**，好在经过 **[LIlGG](https://github.com/Einstein-schrodinger/halo-plugin-typst/pull/1)** 的优化，现在只需要编辑器渲染完毕，主题端会直接加载其渲染结果，无需二次编译与渲染，对于访客来言是无感的
 2. 本插件依赖的核心库 [typst.ts](https://github.com/Myriad-Dreamin/typst.ts) 目前支持的 Typst 版本为 0.14.2，在使用时如果你导入的 Package 所依赖的 Typst 版本高于 0.14.2 会导致渲染失败，在确定没有语法和资源导入问题的情况下渲染失败，大概率是 Package 版本的问题
 
 ## 贡献指南
@@ -114,7 +114,7 @@ git clone git@github.com:{your_github_id}/halo-plugin-typst.git
 - [Myriad-Dreamin/typst.ts](https://github.com/Myriad-Dreamin/typst.ts)：本插件依赖的核心库，感谢该项目的贡献者们
 - [plugin-katex](https://github.com/halo-sigs/plugin-katex)，[plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)：本插件部分代码基于这两个插件的代码实现，感谢这两个插件的贡献者们
 - [Trae CN](https://www.trae.cn/)：本插件的大部分代码由 Trae CN 完成，特别感谢 Trae CN 对本项目的贡献，让我略懂一点语法也可以“指挥”AI在以上两个插件的基础上实现 Typst 编辑块的功能
-- [@LIGG](https://github.com/Einstein-schrodinger/halo-plugin-typst/pull/1)：感谢该贡献者对本插件的大幅度优化🌹
+- [LIlGG](https://github.com/Einstein-schrodinger/halo-plugin-typst/pull/1)：感谢该贡献者对本插件的大幅度优化🌹
 
 ## 许可证
 
