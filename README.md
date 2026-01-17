@@ -2,7 +2,7 @@
 
 Typst 插件，实现 Typst 代码在 **默认编辑器** 与文章页的渲染，[Typst](https://typst.app/) 是一种新的基于标记的排版系统，旨在提供与 LaTeX 相似的强大功能，但更易于学习和使用，可以像 Markdown 一样快速上手。
 
-Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版内容，通过选择合适的 Template 可以轻松渲染精美的学术笔记、简历、海报等，此外，该插件也适合渲染片段代码来作为博客文章的插图，借助各种 Package 可以实现任何你想要的效果，比如借助 CeTZ 等 Package 可以轻松绘制各种图像，比如流程图、电路图、五线谱图、二维函数图、三维函数图等。
+Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版内容，通过选择合适的 Template 可以轻松渲染精美的学术笔记、简历、海报等，此外，该插件也适合渲染片段代码来作为博客文章的插图，借助各种 Package 可以实现任何你想要的效果，比如借助 CeTZ 等 Package 可以轻松绘制各种图像，例如流程图、电路图、五线谱图、二维函数图、三维函数图等。
 
 ## 效果预览
 
@@ -54,7 +54,7 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 
    ```typst
    // typ文件导入
-     #import "https://www.sqwfly.top/upload/conf.typ": conf
+   #import "https://www.sqwfly.top/upload/conf.typ": conf
      
    // 图片渲染
    #figure(
@@ -78,16 +78,10 @@ Typst 插件（更准确的说是Typst）可以用来渲染各式各样的排版
 
 ## 注意事项
 
-1. 本插件在渲染 Typst 代码时，会将 Typst 代码转换为 SVG 图片，所以在渲染时会有一定的延迟，并占用的一定的资源，请不要渲染过于复杂或大量的 Typst 代码，否则会导致页面卡顿甚至卡死，**初次渲染时请耐心等待**
+1. 本插件会编译并渲染 Typst 代码为 SVG 图片，所以整个过程需要一定的时间，并占用一定的资源，请不要在“简陋”的服务器上书写过于复杂或大量的 Typst 代码，否则会导致页面卡顿甚至卡死，**初次渲染时请耐心等待，可能需要1~3分钟（也与加载的自定义字体文件大小有关）**，好在经过 **[LIGG](https://github.com/Einstein-schrodinger/halo-plugin-typst/pull/1)** 的优化，现在只需要编辑器渲染完毕，主题端会直接加载其渲染结果，无需二次编译与渲染，对于访客来言是无感的
 2. 本插件依赖的核心库 [typst.ts](https://github.com/Myriad-Dreamin/typst.ts) 目前支持的 Typst 版本为 0.14.2，在使用时如果你导入的 Package 所依赖的 Typst 版本高于 0.14.2 会导致渲染失败，在确定没有语法和资源导入问题的情况下渲染失败，大概率是 Package 版本的问题
-3. 不支持导出，所以在导出文章时需要手动复制进行导出
 
 ## 贡献指南
-
->亟待解决的问题：
->
-- [x] 当前卸载或禁用之后内容会直接消失并且无法导出，期望在插件卸载或禁用之后可以保留 Typst 代码。
-- [ ] 插件失效后如果代码内容可以 Typst 代码块的形式呈现而非普通文本则更加直观，导出为 Markdown 格式时也更友好
 
 欢迎提交 Issue 和 Pull Request 来帮助改进项目，希望更多贡献者可以参与进来使该插件从能用到好用
 
@@ -120,6 +114,7 @@ git clone git@github.com:{your_github_id}/halo-plugin-typst.git
 - [Myriad-Dreamin/typst.ts](https://github.com/Myriad-Dreamin/typst.ts)：本插件依赖的核心库，感谢该项目的贡献者们
 - [plugin-katex](https://github.com/halo-sigs/plugin-katex)，[plugin-text-diagram](https://github.com/halo-sigs/plugin-text-diagram)：本插件部分代码基于这两个插件的代码实现，感谢这两个插件的贡献者们
 - [Trae CN](https://www.trae.cn/)：本插件的大部分代码由 Trae CN 完成，特别感谢 Trae CN 对本项目的贡献，让我略懂一点语法也可以“指挥”AI在以上两个插件的基础上实现 Typst 编辑块的功能
+- [@LIGG](https://github.com/Einstein-schrodinger/halo-plugin-typst/pull/1)：感谢该贡献者对本插件的大幅度优化🌹
 
 ## 许可证
 
