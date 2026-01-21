@@ -28,21 +28,24 @@ const addNamespaceToSvgScript = (svg: string, namespaceId: string): string => {
 }
 
 // 渲染函数
-export const renderTypst = async (content: string): Promise<string> => {
+export const renderTypst = async (
+        content: string,
+        onRenderingStart?: () => void,
+        onRenderingComplete?: () => void
+): Promise<string> => {
   // 检查内容
   if (!content?.trim()) {
     return '<p style="color: #999; font-style: italic;">请输入 Typst 代码</p>'
   }
-
   try {
+    // 通知开始渲染
+    onRenderingStart?.()
     // 处理资源映射（图片和数据文件）
     const resourceResult: ResourceMappingResult = await processTypstResources(content)
-
     // 渲染 SVG
     const svg = await $typst.svg({
       mainContent: resourceResult.processedCode,
     })
-
     const namespaceId = generateNamespaceId()
     return addNamespaceToSvgScript(svg, namespaceId)
   } catch (err) {
@@ -50,8 +53,11 @@ export const renderTypst = async (content: string): Promise<string> => {
       <div class="typst-render-error">
         <h4>Typst 渲染错误</h4>
         <p>${err instanceof Error ? err.message : '未知错误'}</p>
-        <p>请检查代码语法和资源链接是否正确。</p>
+        <p>请检查代码语法和资源链接是否正确!</p>
       </div>
     `
+  } finally {
+    // 通知渲染完成（无论成功或失败）
+    onRenderingComplete?.()
   }
 }

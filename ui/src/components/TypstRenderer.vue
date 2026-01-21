@@ -1,19 +1,26 @@
 <template>
   <div class="typst-preview-container">
     <!-- 渲染结果 -->
-    <div class="typst-preview-content" v-html="rendered" />
+    <div v-if="isRendering" class="typst-preview-content">
+      <div class="typst-render-rendering">
+        <h4>Typst 尝试渲染中...</h4>
+        <p>请耐心等待，很快就好...</p>
+      </div>
+    </div>
+    <div v-else class="typst-preview-content">
+      <div v-html="rendered"/>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { type NodeViewProps } from '@halo-dev/richtext-editor'
 import { ref, onMounted, watch, computed } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
-import setTypst from './set-typst.ts'
+import setTypst, { isTypstInitialized } from './set-typst.ts'
 import { renderTypst } from './render.typst.ts'
-import { type NodeViewProps } from '@halo-dev/richtext-editor'
 
 const props = defineProps<NodeViewProps & { autoRender: boolean }>()
-
 const content = computed<string>(() => props.node.attrs.content)
 const rendered = computed<string>({
   get() {
@@ -24,34 +31,39 @@ const rendered = computed<string>({
   },
 })
 
+const isRendering = ref<boolean>(false)
 const error = ref<string | null>(null)
-const isTypstInitialized = ref(false)
 
 // 创建防抖渲染函数
 const debouncedRender = useDebounceFn(async (content: string) => {
   // 检查 Typst 是否已初始化
-  if (!isTypstInitialized.value) {
+  if (!isTypstInitialized()) {
     console.warn('Typst 未初始化，跳过渲染')
     return
   }
-
-  rendered.value = await renderTypst(content)
+  try {
+    rendered.value = await renderTypst(
+            content,
+            () => { isRendering.value = true },
+            () => { isRendering.value = false }
+    )
+  } catch (error) {
+    console.error('Typst 渲染失败:', error)
+    // 错误已在renderTypst中处理，这里不需要额外处理
+    isRendering.value = false
+  }
 }, 300)
 
 // 初始化 Typst
 const initTypst = async () => {
-  if (isTypstInitialized.value) {
+  if (isTypstInitialized()) {
     return
   }
-
   try {
     await setTypst()
-    isTypstInitialized.value = true
   } catch (initError) {
     console.error('Typst 初始化失败:', initError)
     error.value = `Typst 初始化失败: ${initError instanceof Error ? initError.message : '未知错误'}`
-    isTypstInitialized.value = false
-
     // 初始化失败时也显示错误信息
     rendered.value = `
       <div class="typst-render-error">
@@ -65,11 +77,9 @@ const initTypst = async () => {
 
 onMounted(async () => {
   await initTypst()
-
   if (rendered.value) {
     return
   }
-
   if (props.autoRender && content.value) {
     await debouncedRender(content.value)
   }
@@ -135,6 +145,27 @@ watch(
 }
 
 .typst-preview-content .typst-render-error p {
+  margin: 5px 0;
+  color: #666;
+}
+
+/* 正在渲染中样式 */
+.typst-preview-content .typst-render-rendering {
+  padding: 20px;
+  border: 1px solid #cdccff;
+  background: #f5f5ff;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.typst-preview-content .typst-render-rendering h4 {
+  color: #632fd3;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.typst-preview-content .typst-render-rendering p {
   margin: 5px 0;
   color: #666;
 }
