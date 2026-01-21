@@ -240,12 +240,6 @@ onMounted(() => {
   overflow: auto;
 }
 
-.typst-preview pre {
-  margin: 0;
-  font-family: monospace;
-  white-space: pre-wrap;
-}
-
 .typst-fullscreen {
   position: fixed;
   top: 0;
