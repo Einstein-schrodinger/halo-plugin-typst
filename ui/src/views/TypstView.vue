@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { nodeViewProps, NodeViewWrapper } from '@halo-dev/richtext-editor'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, nextTick } from 'vue'
+import { useDebounceFn, useMagicKeys } from '@vueuse/core'
 import IcOutlineFullscreen from '~icons/ic/outline-fullscreen'
 import IcOutlineFullscreenExit from '~icons/ic/outline-fullscreen-exit'
 import IcOutlineTipsAndUpdates from '~icons/ic/outline-tips-and-updates'
@@ -13,18 +14,7 @@ const minHeight = ref(120) // 3-5行的高度（约120px）
 const currentHeight = ref(minHeight.value)
 const isEditing = ref(false)
 
-// typst editor
-function onEditorChange(value: string) {
-  try {
-    props.updateAttributes({ content: value })
-    // 编辑时动态调整高度
-    adjustHeightByContent(value)
-  } catch (error) {
-    console.error('Failed to update Typst content:', error)
-  }
-}
-
-// 根据内容动态调整高度
+// 高度调整函数（非防抖版本）
 function adjustHeightByContent(content: string) {
   if (collapsed.value || fullscreen.value) return
 
@@ -40,13 +30,27 @@ function adjustHeightByContent(content: string) {
   currentHeight.value = Math.min(estimatedHeight, maxHeight)
 }
 
+// 创建防抖函数
+const debouncedAdjustHeight = useDebounceFn(adjustHeightByContent, 150)
+
+// typst editor
+function onEditorChange(value: string) {
+  try {
+    props.updateAttributes({ content: value })
+    // 使用防抖函数调整高度
+    debouncedAdjustHeight(value)
+  } catch (error) {
+    console.error('Failed to update Typst content:', error)
+  }
+}
+
 // 监听折叠状态变化
 watch(collapsed, (newCollapsed) => {
   if (!newCollapsed && !fullscreen.value) {
     // 展开时重新计算高度
     const content = props.node.attrs.content || ''
     if (content) {
-      adjustHeightByContent(content)
+      debouncedAdjustHeight(content)
     }
   }
 })
@@ -56,12 +60,25 @@ watch(fullscreen, (newFullscreen) => {
   if (newFullscreen) {
     // 进入全屏时自动展开
     collapsed.value = false
-  } else if (!collapsed.value) {
-    // 退出全屏时重新计算高度
-    const content = props.node.attrs.content || ''
-    if (content) {
-      adjustHeightByContent(content)
-    }
+  } else {
+    // 退出全屏时，等待 DOM 更新后重新计算高度
+    nextTick(() => {
+      if (!collapsed.value) {
+        const content = props.node.attrs.content || ''
+        if (content) {
+          adjustHeightByContent(content) // 直接调用，不需要防抖
+        }
+      }
+    })
+  }
+})
+
+// ESC 键退出全屏
+const { escape } = useMagicKeys()
+
+watch(escape, (value) => {
+  if (value && fullscreen.value) {
+    fullscreen.value = false;
   }
 })
 
@@ -79,44 +96,26 @@ function onEditorBlur() {
   }
 }
 
-onMounted(() => {
-  // 添加ESC键退出全屏的监听
-  const handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && fullscreen.value) {
-      fullscreen.value = false
-      event.preventDefault()
-      event.stopPropagation()
-    }
-  }
-
-  document.addEventListener('keydown', handleKeydown, true)
-
-  // 清理函数
-  const cleanup = () => {
-    document.removeEventListener('keydown', handleKeydown, true)
-  }
-
-  // 组件卸载时清理事件监听
-  onUnmounted(() => {
-    cleanup()
-  })
-
-  watch(
-    () => props.node.attrs.content,
-    (newContent) => {
-      // 初始化时调整高度
-      if (newContent && !collapsed.value && !fullscreen.value) {
-        adjustHeightByContent(newContent)
-      }
-    },
-  )
+onMounted(() => {  
   // 初始化高度
   const initialContent = props.node.attrs.content || ''
   if (initialContent && !collapsed.value && !fullscreen.value) {
-    adjustHeightByContent(initialContent)
+    adjustHeightByContent(initialContent) // 直接调用，不需要防抖
   }
 })
+
+// 监听内容变化
+watch(
+  () => props.node.attrs.content,
+  (newContent) => {
+    if (newContent && !collapsed.value && !fullscreen.value) {
+      debouncedAdjustHeight(newContent)
+    }
+  },
+  { immediate: true }
+)
 </script>
+
 <template>
   <node-view-wrapper class="typst-container" :class="{ 'typst-fullscreen': fullscreen }">
     <div class="typst-nav">
@@ -185,12 +184,14 @@ onMounted(() => {
     </div>
   </node-view-wrapper>
 </template>
+
 <style>
 .typst-container {
   border: 1px #e7e7e7 solid;
   border-radius: 4px;
   overflow: hidden;
   margin-top: 0.75em;
+  transition: height 0.3s ease;
 }
 
 .typst-nav {
@@ -231,6 +232,8 @@ onMounted(() => {
 .typst-code {
   height: 100%;
   border-right: 1px #e7e7e7 solid;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .typst-preview {
@@ -253,16 +256,28 @@ onMounted(() => {
   margin-top: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .typst-fullscreen .typst-nav {
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #e7e7e7;
 }
 
 .typst-fullscreen .typst-editor-panel {
   flex: 1;
   height: auto !important;
   min-height: 0;
+  overflow: hidden;
+}
+
+.typst-fullscreen .typst-code,
+.typst-fullscreen .typst-preview {
+  overflow: auto;
 }
 
 .typst-fullscreen-icon {
@@ -304,29 +319,5 @@ onMounted(() => {
 
 .typst-fullscreen-icon:hover {
   color: #999;
-}
-
-/* 确保代码区和预览区在所有模式下都能独立滚动 */
-.typst-code {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.typst-preview {
-  overflow: auto;
-}
-
-/* 全屏模式下的额外样式 */
-.typst-fullscreen .typst-editor-panel {
-  overflow: hidden;
-}
-
-/* 确保标题栏在全屏时始终可见 */
-.typst-fullscreen .typst-nav {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: #fff;
-  border-bottom: 1px solid #e7e7e7;
 }
 </style>
