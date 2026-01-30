@@ -1,7 +1,7 @@
 import { rsbuildConfig } from '@halo-dev/ui-plugin-bundler-kit'
 import Icons from 'unplugin-icons/rspack'
 import { pluginSass } from '@rsbuild/plugin-sass'
-import type { RsbuildConfig, RsbuildPlugin } from '@rsbuild/core'
+import type { RsbuildPlugin } from '@rsbuild/core'
 import { copyFileSync, existsSync, mkdirSync } from 'fs'
 import path, { join, dirname } from 'path'
 
