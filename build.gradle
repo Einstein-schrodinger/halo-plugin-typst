@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.github.node-gradle.node" version "7.1.0"
     id "io.freefair.lombok" version "8.13"
     id "run.halo.plugin.devtools" version "0.6.2"
 }
@@ -29,20 +30,23 @@ java {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
-    options.release = 21
+node {
+    nodeProjectDir = file("${project.projectDir}/ui")
 }
 
-tasks.register('processUiResources', Copy) {
-    from project(':ui').layout.buildDirectory.dir('dist')
-    into layout.buildDirectory.dir('resources/main/console')
-    dependsOn project(':ui').tasks.named('assemble')
-    shouldRunAfter tasks.named('processResources')
+tasks.register('buildFrontend', PnpmTask) {
+    args = ['build']
+    dependsOn('installDepsForUI')
 }
 
-tasks.named('classes') {
-    dependsOn tasks.named('processUiResources')
+tasks.register('installDepsForUI', PnpmTask) {
+    args = ['install']
+}
+
+build {
+    tasks.named('compileJava').configure {
+        dependsOn('buildFrontend')
+    }
 }
 
 halo {
