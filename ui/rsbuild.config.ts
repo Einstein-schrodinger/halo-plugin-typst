@@ -15,7 +15,10 @@ const pluginCopyStyles = (staticDir: string): RsbuildPlugin => ({
   setup(api) {
     api.onAfterBuild(async ({ environments }) => {
       const distPath = Object.values(environments)[0]?.distPath
-      if (!distPath) return
+
+      if (!distPath) {
+        mkdirSync(distPath, { recursive: true })
+      }
 
       const styleCssPath = join(distPath, 'style.css')
       const targetPath = join(process.cwd(), staticDir, 'typst.css')
